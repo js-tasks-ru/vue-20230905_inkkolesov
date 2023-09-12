@@ -31,7 +31,7 @@
     <div id="app" class="container">
       <div class="row">
         <div class="col">
-          <input v-model.number="number_1" type="number" />
+          <input v-model="number_1" type="number" />
         </div>
 
         <div class="col" style="display: flex; flex-direction: column; font-family: emoji">
@@ -42,12 +42,12 @@
         </div>
 
         <div class="col">
-          <input v-model.number="number_2" type="number" />
+          <input v-model="number_2" type="number" />
         </div>
 
         <div class="col">=</div>
 
-        <output class="col">{{calculatedOutput}}</output>
+        <output class="col">{{ calculatedOutput }}</output>
       </div>
     </div>
 

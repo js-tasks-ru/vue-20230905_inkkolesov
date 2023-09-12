@@ -11,11 +11,11 @@
           type="radio"
           :value="id"
           v-model="selectedMeetupID"
-          :name="'meetupId' + id"
+          name="meetupId"
         /> {{id}}</label>
         <hr />
 
-        <h3 v-if="selectedMeetup">{{selectedMeetup.title}}</h3>
+        <h3 v-if="selectedMeetup">{{ selectedMeetup.title }}</h3>
       </div>
     </div>
 
