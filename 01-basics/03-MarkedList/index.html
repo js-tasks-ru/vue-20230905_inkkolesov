@@ -17,16 +17,10 @@
           <input v-model="search" type="search" />
         </div>
         <ul>
-          <template v-if="search">
-            <li
-              v-for="email in searchMarkedEmail"
-              :class="{'marked': email.marked}"
-            >{{ email.text }}</li>
-          </template>
-          <template v-else>
-            <li v-for="email in emails"
-            >{{ email }}</li>
-          </template>
+          <li
+            v-for="email in searchMarkedEmail"
+            :class="{'marked': search && email.marked}"
+          >{{ email.text }}</li>
         </ul>
       </div>
     </div>
