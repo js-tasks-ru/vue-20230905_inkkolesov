@@ -1,24 +1,23 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <title>MeetupTitle</title>
-  </head>
-  <body>
-    <div id="app">
-      <div>
-        <label v-for="id in 5"><input
-          type="radio"
-          :value="id"
-          v-model="selectedMeetupID"
-          name="meetupId"
-        /> {{id}}</label>
-        <hr />
 
-        <h3 v-if="selectedMeetup">{{ selectedMeetup.title }}</h3>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <title>MeetupTitle</title>
+</head>
+
+<body>
+  <div id="app">
+    <div>
+      <label v-for="id in 5"><input type="radio" :value="id" v-model="selectedMeetupID" name="meetupId" /> {{ id
+        }}</label>
+      <hr />
+
+      <h3 v-if="selectedMeetup">{{ selectedMeetup.title }}</h3>
     </div>
+  </div>
 
-    <script type="module" src="./script.js"></script>
-  </body>
+  <script type="module" src="./script.js"></script>
+</body>
+
 </html>
