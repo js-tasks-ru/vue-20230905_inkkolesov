@@ -14,17 +14,22 @@ export default {
     },
     image: {
       type: String,
-      default: '--default-cover',
+    },
+  },
+
+  computed: {
+    computedImage() {
+      return this.image ? `url('${this.image}')` : 'var(--default-cover)';
     },
   },
 };
 </script>
 
-<style module>
+<style scoped>
 .meetup-cover {
   background-size: cover;
   background-position: center;
-  background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), v-bind(image);
+  background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), v-bind(computedImage);
   display: flex;
   flex-direction: column;
   align-items: center;
