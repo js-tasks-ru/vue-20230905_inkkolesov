@@ -10,12 +10,12 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 /* _transitions.css */
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.2s ease-in-out;
+  transition: opacity 1.5s ease-in-out;
 }
 
 .fade-enter-from,
