@@ -10,8 +10,6 @@ export default {
       required: true,
     },
   },
-  emits: ['onclose'],
-  methods: {},
 };
 </script>
 

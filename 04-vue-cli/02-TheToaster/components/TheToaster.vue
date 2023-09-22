@@ -7,7 +7,6 @@
 <script>
 import UiIcon from './UiIcon.vue';
 import UIToast from './UiToast.vue';
-import index from 'vuex';
 
 export default {
   name: 'TheToaster',
@@ -25,11 +24,11 @@ export default {
       const toast = { type, message };
       this.toasts.push(toast);
       setTimeout(() => {
-        this.delToast(toast);
+        this.delToast();
       }, duration);
     },
-    delToast(unsettedToast) {
-      this.toasts = this.toasts.filter((toast) => toast !== unsettedToast);
+    delToast() {
+      this.toasts.shift();
     },
     success(message, duration) {
       this.addToast('success', message, duration);
