@@ -26,8 +26,8 @@ export default {
 
 <template>
   <div class="toast" :class="toastClass">
-        <UiIcon :icon="iconClass"/>
-    <span>{{ toast.message }}</span>
+        <UiIcon class="toast__icon" :icon="iconClass"/>
+    <span>{{ message }}</span>
   </div>
 </template>
 
