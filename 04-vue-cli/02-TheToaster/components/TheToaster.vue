@@ -1,24 +1,43 @@
 <template>
   <div class="toasts">
-    <div class="toast toast_success">
-      <UiIcon class="toast__icon" icon="check-circle" />
-      <span>Success Toast Example</span>
-    </div>
-
-    <div class="toast toast_error">
-      <UiIcon class="toast__icon" icon="alert-circle" />
-      <span>Error Toast Example</span>
-    </div>
+    <UIToast v-for="(toast, index) in toasts" :key="index" :toast="toast" />
   </div>
 </template>
 
 <script>
 import UiIcon from './UiIcon.vue';
+import UIToast from './UiToast.vue';
+import index from 'vuex';
 
 export default {
   name: 'TheToaster',
 
-  components: { UiIcon },
+  components: { UIToast, UiIcon },
+
+  data() {
+    return {
+      toasts: [],
+    };
+  },
+
+  methods: {
+    addToast(type, message, duration = 5000) {
+      const toast = { type, message };
+      this.toasts.push(toast);
+      setTimeout(() => {
+        this.delToast(toast);
+      }, duration);
+    },
+    delToast(unsettedToast) {
+      this.toasts = this.toasts.filter((toast) => toast !== unsettedToast);
+    },
+    success(message, duration) {
+      this.addToast('success', message, duration);
+    },
+    error(message, duration) {
+      this.addToast('error', message, duration);
+    },
+  },
 };
 </script>
 
