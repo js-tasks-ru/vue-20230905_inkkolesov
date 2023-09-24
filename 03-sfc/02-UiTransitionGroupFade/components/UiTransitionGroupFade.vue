@@ -26,7 +26,7 @@ export default {
 
 ::v-global(.fade-list > *) {
   opacity: 1;
-  transition: opacity 0.3s ease-out;
+  transition: opacity 13s ease-out;
 }
 
 ::v-global(.fade-list .fade-list-leave-active) {
@@ -41,6 +41,6 @@ export default {
 }
 
 ::v-global(.fade-list .fade-list-move) {
-  transition: transform 0.3s;
+  transition: transform 4s;
 }
 </style>
