@@ -10,7 +10,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 /* _transitions.css */
 
 .fade-enter-active,
