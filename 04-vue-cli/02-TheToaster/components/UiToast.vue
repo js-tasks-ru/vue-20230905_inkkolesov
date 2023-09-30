@@ -5,20 +5,21 @@ export default {
   name: 'UIToast',
   components: { UiIcon },
   props: {
-    toast: {
-      type: Object,
+    message: {
+      type: String,
+      required: true,
+    },
+    type: {
+      type: String,
       required: true,
     },
   },
   computed: {
-    message() {
-      return this.toast.message;
-    },
     toastClass() {
-      return `toast toast_${this.toast.type}`;
+      return `toast toast_${this.type}`;
     },
     iconClass() {
-      return `${this.toast.type === 'success' ? 'check-circle' : 'alert-circle'}`;
+      return `${this.type === 'success' ? 'check-circle' : 'alert-circle'}`;
     },
   },
 };
@@ -26,7 +27,7 @@ export default {
 
 <template>
   <div class="toast" :class="toastClass">
-        <UiIcon class="toast__icon" :icon="iconClass"/>
+    <UiIcon class="toast__icon" :icon="iconClass" />
     <span>{{ message }}</span>
   </div>
 </template>

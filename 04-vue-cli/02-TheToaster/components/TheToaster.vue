@@ -1,6 +1,6 @@
 <template>
   <div class="toasts">
-    <UIToast v-for="(toast, index) in toasts" :key="index" :toast="toast" />
+    <UIToast v-for="(toast, index) in toasts" :key="index" :message="toast.message" :type="toast.type" />
   </div>
 </template>
 
@@ -10,7 +10,7 @@ import UIToast from './UiToast.vue';
 export default {
   name: 'TheToaster',
 
-  components: { UIToast, },
+  components: { UIToast },
 
   data() {
     return {
