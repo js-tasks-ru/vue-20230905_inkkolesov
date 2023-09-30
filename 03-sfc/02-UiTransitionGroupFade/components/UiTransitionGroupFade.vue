@@ -1,5 +1,5 @@
 <template>
-  <TransitionGroup :tag="tag" name="fade-list" class="fade-list">
+  <TransitionGroup :tag="tag" name="fade-list" class="fade - list">
     <slot />
   </TransitionGroup>
 </template>
@@ -24,23 +24,23 @@ export default {
   position: relative;
 }
 
-::v-global(.fade-list > *) {
+.fade-list>* {
   opacity: 1;
   transition: opacity 0.3s ease-out;
 }
 
-::v-global(.fade-list .fade-list-leave-active) {
+.fade-list .fade-list-leave-active {
   position: absolute !important;
   left: 0;
   right: 0;
 }
 
-::v-global(.fade-list .fade-list-enter-from),
-::v-global(.fade-list .fade-list-leave-to) {
+.fade-list .fade-list-enter-from,
+.fade-list .fade-list-leave-to {
   opacity: 0;
 }
 
-::v-global(.fade-list .fade-list-move) {
-  transition: transform 4s;
+.fade-list .fade-list-move {
+  transition: transform 0.3s;
 }
 </style>
