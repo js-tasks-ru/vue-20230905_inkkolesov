@@ -26,8 +26,7 @@ export default {
 
 .fade-list :deep(>*) {
   opacity: 1;
-  /* transition: opacity 0.3s ease-out; */
-  transition: opacity 4s ease-out;
+  transition: opacity 0.3s ease-out;
 }
 
 .fade-list :deep(.fade-list-leave-active) {
