@@ -1,4 +1,6 @@
-const { default: MeetupsCalendar } = require(global.getSolutionPath('./components/MeetupsCalendar'));
+const { default: MeetupsCalendar } = require(global.getSolutionPath(
+  './components/MeetupsCalendar',
+));
 import { mount } from '@vue/test-utils';
 import { advanceTo } from 'jest-date-mock';
 
@@ -19,7 +21,9 @@ function testCellsInactive(cells, daysBefore, daysIn, daysAfter) {
   const expectedInactive = [...Array(daysBefore.length).fill(true)]
     .concat(Array(daysIn).fill(false))
     .concat(Array(daysAfter.length).fill(true));
-  const cellsHasInactive = cells.map((cell) => cell.classes(CELL_INACTIVE_CLASS));
+  const cellsHasInactive = cells.map((cell) =>
+    cell.classes(CELL_INACTIVE_CLASS),
+  );
   expect(cellsHasInactive).toEqual(expectedInactive);
 }
 
@@ -40,7 +44,13 @@ function testMonthTitle(title, _date) {
   expect(title).toBe(expected);
 }
 
-function testMonthCalendar(wrapper, expectedDate, daysBefore, daysIn, daysAfter) {
+function testMonthCalendar(
+  wrapper,
+  expectedDate,
+  daysBefore,
+  daysIn,
+  daysAfter,
+) {
   const cells = wrapper.findAll(SELECTOR_CELL);
   testDaysCount(cells, daysBefore, daysIn, daysAfter);
   testCellsInactive(cells, daysBefore, daysIn, daysAfter);
@@ -91,7 +101,13 @@ describe('vue-cli/MeetupsCalendar', () => {
     it('MeetupsCalendar должен вывести корректные числа в ячейках Апреля 2023 (+ 5 дней предыдущего и 0 дней следующего месяцев)', () => {
       advanceTo(new Date('2023-04-15'));
       const wrapper = mountMeetupsCalendar();
-      testMonthCalendar(wrapper, '2023-04-15', ['27', '28', '29', '30', '31'], 30, []);
+      testMonthCalendar(
+        wrapper,
+        '2023-04-15',
+        ['27', '28', '29', '30', '31'],
+        30,
+        [],
+      );
     });
 
     it('MeetupsCalendar должен вывести корректные числа в ячейках Мая 2023 (+ 0 дней предыдущего и 4 дня следующего месяцев)', () => {

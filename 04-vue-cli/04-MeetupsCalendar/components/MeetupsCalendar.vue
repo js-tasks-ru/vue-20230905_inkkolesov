@@ -2,159 +2,43 @@
   <div class="calendar-view">
     <div class="calendar-view__controls">
       <div class="calendar-view__controls-inner">
-        <button class="calendar-view__control-left" type="button" aria-label="Previous month"></button>
-        <div class="calendar-view__date">Декабрь 2022 г.</div>
-        <button class="calendar-view__control-right" type="button" aria-label="Next month"></button>
+        <button
+          class="calendar-view__control-left"
+          type="button"
+          aria-label="Previous month"
+          @click="previousMonth"
+        ></button>
+        <div class="calendar-view__date">{{ localDateSet }}</div>
+        <button
+          class="calendar-view__control-right"
+          type="button"
+          aria-label="Next month"
+          @click="nextMonth"
+        ></button>
       </div>
     </div>
-
     <div class="calendar-view__grid">
-      <div class="calendar-view__cell calendar-view__cell_inactive" tabindex="0">
-        <div class="calendar-view__cell-day">28</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell calendar-view__cell_inactive" tabindex="0">
-        <div class="calendar-view__cell-day">29</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell calendar-view__cell_inactive" tabindex="0">
-        <div class="calendar-view__cell-day">30</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">1</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">2</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">3</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">4</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <!-- -->
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">5</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">6</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">7</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">8</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">9</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">10</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">11</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <!-- -->
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">12</div>
-        <div class="calendar-view__cell-content">
-          <a href="/meetups/1" class="calendar-event">Meetup 1</a>
-          <a href="/meetups/2" class="calendar-event">Meetup 2</a>
+      <div
+        v-for="day in dayInMonth.total"
+        class="calendar-view__cell"
+        :class="{ 'calendar-view__cell_inactive': isActive(day) }"
+        tabindex="0"
+      >
+        <div class="calendar-view__cell-day">
+          {{ setDayToDate(day).day }}
         </div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">13</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">14</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">15</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">16</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">17</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">18</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <!-- -->
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">19</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">20</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">21</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">22</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">23</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">24</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">25</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <!-- -->
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">26</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">27</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">28</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">29</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">30</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell" tabindex="0">
-        <div class="calendar-view__cell-day">31</div>
-        <div class="calendar-view__cell-content"></div>
-      </div>
-      <div class="calendar-view__cell calendar-view__cell_inactive" tabindex="0">
-        <div class="calendar-view__cell-day">1</div>
-        <div class="calendar-view__cell-content"></div>
+        <div class="calendar-view__cell-content">
+          <a
+            v-for="meetup in meetups.filter(
+              (m) =>
+                setTimeStampToLocal(m.date) === setDayToDate(day).timeStamp,
+            )"
+            :href="`/meetups/${meetup.id}`"
+            class="calendar-event"
+          >
+            {{ meetup.title }}
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -168,6 +52,111 @@ export default {
     meetups: {
       type: Array,
       required: true,
+    },
+  },
+
+  data() {
+    return {
+      date: new Date(),
+    };
+  },
+
+  computed: {
+    localDateSet() {
+      return this.date.toLocaleDateString(navigator.language, {
+        month: 'long',
+        year: 'numeric',
+      });
+    },
+
+    dayInMonth() {
+      let firstDayInMonth = new Date(
+        this.date.getFullYear(),
+        this.date.getMonth(),
+        1,
+      ).getDay();
+      const firstDayObject = {
+        0: 6,
+        1: 0,
+        2: 1,
+        3: 2,
+        4: 3,
+        5: 4,
+        6: 5,
+      };
+      firstDayInMonth = firstDayObject[firstDayInMonth];
+
+      const dayInMonth = new Date(
+        this.date.getFullYear(),
+        this.date.getMonth() + 1,
+        0,
+      ).getDate();
+
+      let lastDayInMonth = new Date(
+        this.date.getFullYear(),
+        this.date.getMonth() + 1,
+        0,
+      ).getDay();
+      const lastDayObject = {
+        0: 0,
+        1: 6,
+        2: 5,
+        3: 4,
+        4: 3,
+        5: 2,
+        6: 1,
+      };
+      lastDayInMonth = lastDayObject[lastDayInMonth];
+
+      return {
+        total: firstDayInMonth + dayInMonth + lastDayInMonth,
+        start: firstDayInMonth,
+        end: lastDayInMonth,
+      };
+    },
+  },
+
+  methods: {
+    previousMonth() {
+      this.date = new Date(this.date.setMonth(this.date.getMonth() - 1));
+    },
+
+    nextMonth() {
+      this.date = new Date(this.date.setMonth(this.date.getMonth() + 1));
+    },
+
+    setDayToDate(day) {
+      const date = new Date(
+        this.date.getFullYear(),
+        this.date.getMonth(),
+        day - this.dayInMonth.start,
+      );
+      const localDay = date.toLocaleDateString(navigator.language, {
+        day: 'numeric',
+      });
+      const localWeekday = date.toLocaleDateString(navigator.language, {
+        weekday: 'long',
+      });
+      const month = date.getMonth();
+      const timeStamp = date.getTime();
+      return {
+        date: date,
+        day: localDay,
+        month: month,
+        timeStamp: timeStamp,
+        weekday: localWeekday,
+      };
+    },
+
+    isActive(day) {
+      return this.setDayToDate(day).month !== this.date.getMonth();
+    },
+
+    setTimeStampToLocal(date) {
+      let timeStamp = new Date(date);
+      timeStamp =
+        timeStamp.getTime() + timeStamp.getTimezoneOffset() * 60 * 1000;
+      return +timeStamp;
     },
   },
 };
