@@ -73,6 +73,8 @@ export default {
     };
   },
 
+  emits: ['update:modelValue'],
+
   computed: {
     selectedOption() {
       return this.options.find((option) => option.value === this.modelValue);
