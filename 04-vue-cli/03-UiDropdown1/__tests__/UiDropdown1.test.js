@@ -1,4 +1,6 @@
-const UiDropdown = require(global.getSolutionPath('components/UiDropdown')).default;
+const UiDropdown = require(global.getSolutionPath(
+  'components/UiDropdown',
+)).default;
 import { mount } from '@vue/test-utils';
 import UiIcon from '../components/UiIcon.vue';
 
@@ -29,14 +31,22 @@ describe('vue-cli/UiDropdown1', () => {
 
     it('UiDropdown должен иметь текст в dropdown__toggle с текстом выбранного варианта в соответствии со значением модели', () => {
       const wrapper = mount(UiDropdown, {
-        props: { options: OPTIONS, title: TITLE, modelValue: OPTIONS[1].value },
+        props: {
+          options: OPTIONS,
+          title: TITLE,
+          modelValue: OPTIONS[1].value,
+        },
       });
       expect(wrapper.get('.dropdown__toggle').text()).toBe(OPTIONS[1].text);
     });
 
     it('UiDropdown должен иметь текст в dropdown__toggle с текстом выбранного варианта в соответствии со значением модели после его обновления', async () => {
       const wrapper = mount(UiDropdown, {
-        props: { options: OPTIONS, title: TITLE, modelValue: OPTIONS[1].value },
+        props: {
+          options: OPTIONS,
+          title: TITLE,
+          modelValue: OPTIONS[1].value,
+        },
       });
       await wrapper.setProps({ modelValue: OPTIONS[0].value });
       expect(wrapper.get('.dropdown__toggle').text()).toBe(OPTIONS[0].text);
@@ -44,10 +54,19 @@ describe('vue-cli/UiDropdown1', () => {
 
     it('UiDropdown должен иметь текст в dropdown__toggle с текстом выбранного варианта в соответствии со значением модели после обновления списка вариантов', async () => {
       const wrapper = mount(UiDropdown, {
-        props: { options: OPTIONS, title: TITLE, modelValue: OPTIONS[1].value },
+        props: {
+          options: OPTIONS,
+          title: TITLE,
+          modelValue: OPTIONS[1].value,
+        },
       });
-      await wrapper.setProps({ options: NEW_OPTIONS, modelValue: NEW_OPTIONS[2].value });
-      expect(wrapper.get('.dropdown__toggle').text()).toBe(NEW_OPTIONS[2].text);
+      await wrapper.setProps({
+        options: NEW_OPTIONS,
+        modelValue: NEW_OPTIONS[2].value,
+      });
+      expect(wrapper.get('.dropdown__toggle').text()).toBe(
+        NEW_OPTIONS[2].text,
+      );
     });
 
     it('UiDropdown должен изначально рендерить, но скрывать список вариантов .dropdown__menu', async () => {
@@ -95,7 +114,9 @@ describe('vue-cli/UiDropdown1', () => {
       await wrapper.get('.dropdown__item:nth-child(2)').trigger('click');
       expect(wrapper.emitted('update:modelValue')).toBeTruthy();
       expect(wrapper.emitted('update:modelValue').length).toBe(1);
-      expect(wrapper.emitted('update:modelValue')[0]).toEqual([OPTIONS[1].value]);
+      expect(wrapper.emitted('update:modelValue')[0]).toEqual([
+        OPTIONS[1].value,
+      ]);
     });
 
     it('UiDropdown должен рендерить, но скрывать список вариантов .dropdown__menu после выбора варианта', async () => {
@@ -111,14 +132,18 @@ describe('vue-cli/UiDropdown1', () => {
       const wrapper = mount(UiDropdown, {
         props: { options: OPTIONS, title: TITLE, modelValue: '2' },
       });
-      expect(wrapper.get('.dropdown__toggle').classes('dropdown__toggle_icon')).toBeFalsy();
+      expect(
+        wrapper.get('.dropdown__toggle').classes('dropdown__toggle_icon'),
+      ).toBeFalsy();
     });
 
     it('UiDropdown должен рендерить основную кнопку .dropdown__toggle с классом dropdown__toggle_icon, если хотя бы у одного варианта есть иконка (option.icon)', async () => {
       const wrapper = mount(UiDropdown, {
         props: { options: OPTIONS_WITH_ICON, title: TITLE },
       });
-      expect(wrapper.get('.dropdown__toggle').classes('dropdown__toggle_icon')).toBeTruthy();
+      expect(
+        wrapper.get('.dropdown__toggle').classes('dropdown__toggle_icon'),
+      ).toBeTruthy();
     });
 
     it('UiDropdown должен выводить иконку выбранного варианта в .dropdown__toggle компонентом UiIcon', async () => {
@@ -134,7 +159,9 @@ describe('vue-cli/UiDropdown1', () => {
         props: { options: OPTIONS, title: TITLE },
       });
       const items = wrapper.findAll('.dropdown__item');
-      expect(items.some((wrapper) => wrapper.classes('dropdown__item_icon'))).toBeFalsy();
+      expect(
+        items.some((wrapper) => wrapper.classes('dropdown__item_icon')),
+      ).toBeFalsy();
     });
 
     it('UiDropdown должен выводить все варианты с классом dropdown__item_icon, если хотя бы у одного варианта есть иконка (option.icon)', async () => {
@@ -142,7 +169,9 @@ describe('vue-cli/UiDropdown1', () => {
         props: { options: OPTIONS_WITH_ICON, title: TITLE },
       });
       const items = wrapper.findAll('.dropdown__item');
-      expect(items.every((wrapper) => wrapper.classes('dropdown__item_icon'))).toBeTruthy();
+      expect(
+        items.every((wrapper) => wrapper.classes('dropdown__item_icon')),
+      ).toBeTruthy();
     });
 
     it('UiDropdown должен выводить все варианты с классом dropdown__item_icon, если хотя бы у одного варианта есть иконка (option.icon) после обновления списка вариантов', async () => {
@@ -151,12 +180,12 @@ describe('vue-cli/UiDropdown1', () => {
       });
       await wrapper.setProps({ options: OPTIONS_WITH_ICON });
       const items = wrapper.findAll('.dropdown__item');
-      expect(items.every((wrapper) => wrapper.classes('dropdown__item_icon'))).toBeTruthy();
+      expect(
+        items.every((wrapper) => wrapper.classes('dropdown__item_icon')),
+      ).toBeTruthy();
     });
 
     // Раскомментируйте блок ниже, если решаете дополнительную часть задачи
-
-    /*
 
     it('UiDropdown должен иметь <select> со списком вариантов <option> в соответствии с параметром options', () => {
       const wrapper = mount(UiDropdown, {
@@ -174,22 +203,30 @@ describe('vue-cli/UiDropdown1', () => {
 
     it('UiDropdown должен иметь <select> со значением модели', () => {
       const wrapper = mount(UiDropdown, {
-        props: { options: OPTIONS, title: TITLE, modelValue: OPTIONS[1].value },
+        props: {
+          options: OPTIONS,
+          title: TITLE,
+          modelValue: OPTIONS[1].value,
+        },
       });
       expect(wrapper.get('select').element.value).toBe(OPTIONS[1].value);
     });
 
     it('UiDropdown должен порождать событие обновления модели при обновлении значения на скрытом <select>', async () => {
       const wrapper = mount(UiDropdown, {
-        props: { options: OPTIONS, title: TITLE, modelValue: OPTIONS[0].value },
+        props: {
+          options: OPTIONS,
+          title: TITLE,
+          modelValue: OPTIONS[0].value,
+        },
       });
       const select = wrapper.get('select');
       await select.setValue(OPTIONS[1].value);
       expect(wrapper.emitted('update:modelValue')).toBeTruthy();
       expect(wrapper.emitted('update:modelValue').length).toBe(1);
-      expect(wrapper.emitted('update:modelValue')[0]).toEqual([OPTIONS[1].value]);
+      expect(wrapper.emitted('update:modelValue')[0]).toEqual([
+        OPTIONS[1].value,
+      ]);
     });
-
-     */
   });
 });

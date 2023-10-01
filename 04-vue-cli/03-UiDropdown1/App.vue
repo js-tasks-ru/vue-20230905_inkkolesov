@@ -2,10 +2,18 @@
   <div class="sample container">
     <h2>With icons</h2>
     <p>selectedType = {{ selectedType }}</p>
-    <p><button @click="selectedType = 'registration'">Set registration</button></p>
-    <p><button @click="updateOptions">Remove last option</button></p>
     <p>
-      <UiDropdown v-model="selectedType" :options="agendaItemTypes" title="Событие" />
+      <button @click="selectedType = 'registration'">Set registration</button>
+    </p>
+    <p>
+      <button @click="updateOptions">Remove last option</button>
+    </p>
+    <p>
+      <UiDropdown
+        v-model="selectedType"
+        :options="agendaItemTypes"
+        title="Событие"
+      />
     </p>
 
     <h2>Without icons</h2>
@@ -15,8 +23,13 @@
     </p>
 
     <h2>Mixed icons</h2>
-    <UiDropdown v-model="selectedMixed" :options="mixedIconsOptions" title="Mixed icons" />
-    <p></p>
+    <p>
+      <UiDropdown
+        v-model="selectedMixed"
+        :options="mixedIconsOptions"
+        title="Mixed icons"
+      />
+    </p>
   </div>
 </template>
 

@@ -12,14 +12,13 @@ export default defineComponent({
   },
 
   computed: {
-    agendaItemIconsType(){
+    agendaItemIconsType() {
       return agendaItemIcons[this.agendaItem.type]
     },
-    agendaItemDefaultTitlesType(){
-
+    agendaItemDefaultTitlesType() {
       return this.agendaItem.title ? this.agendaItem.title : agendaItemDefaultTitles[this.agendaItem.type]
     },
-    agendaItemTime(){
+    agendaItemTime() {
       return this.agendaItem.startsAt + ' - ' + this.agendaItem.endsAt
     },
   },
@@ -27,7 +26,10 @@ export default defineComponent({
   template: `
     <div class="agenda-item">
       <div class="agenda-item__col">
-        <img :src="\`/assets/icons/icon-\${agendaItemIconsType}.svg\`" class="icon" :alt="agendaItemIconsType" />
+        <img
+          :src="\`/assets/icons/icon-\${agendaItemIconsType}.svg\`"
+          class="icon"
+          :alt="agendaItemIconsType" />
       </div>
       <div class="agenda-item__col">{{ agendaItemTime }}</div>
       <div class="agenda-item__col">
