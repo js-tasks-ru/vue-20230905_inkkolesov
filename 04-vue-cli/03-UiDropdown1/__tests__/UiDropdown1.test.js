@@ -187,8 +187,6 @@ describe('vue-cli/UiDropdown1', () => {
 
     // Раскомментируйте блок ниже, если решаете дополнительную часть задачи
 
-    /*
-
     it('UiDropdown должен иметь <select> со списком вариантов <option> в соответствии с параметром options', () => {
       const wrapper = mount(UiDropdown, {
         props: { options: OPTIONS, title: TITLE },
@@ -205,22 +203,30 @@ describe('vue-cli/UiDropdown1', () => {
 
     it('UiDropdown должен иметь <select> со значением модели', () => {
       const wrapper = mount(UiDropdown, {
-        props: { options: OPTIONS, title: TITLE, modelValue: OPTIONS[1].value },
+        props: {
+          options: OPTIONS,
+          title: TITLE,
+          modelValue: OPTIONS[1].value,
+        },
       });
       expect(wrapper.get('select').element.value).toBe(OPTIONS[1].value);
     });
 
     it('UiDropdown должен порождать событие обновления модели при обновлении значения на скрытом <select>', async () => {
       const wrapper = mount(UiDropdown, {
-        props: { options: OPTIONS, title: TITLE, modelValue: OPTIONS[0].value },
+        props: {
+          options: OPTIONS,
+          title: TITLE,
+          modelValue: OPTIONS[0].value,
+        },
       });
       const select = wrapper.get('select');
       await select.setValue(OPTIONS[1].value);
       expect(wrapper.emitted('update:modelValue')).toBeTruthy();
       expect(wrapper.emitted('update:modelValue').length).toBe(1);
-      expect(wrapper.emitted('update:modelValue')[0]).toEqual([OPTIONS[1].value]);
+      expect(wrapper.emitted('update:modelValue')[0]).toEqual([
+        OPTIONS[1].value,
+      ]);
     });
-
-     */
   });
 });

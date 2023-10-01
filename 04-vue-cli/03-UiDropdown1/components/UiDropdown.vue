@@ -33,6 +33,16 @@
         {{ option.text }}
       </button>
     </div>
+
+    <select v-model="localValue" style="display: none">
+      <option
+        v-for="option in options"
+        :key="option.value"
+        :value="option.value"
+      >
+        {{ option.text }}
+      </option>
+    </select>
   </div>
 </template>
 
@@ -59,6 +69,7 @@ export default {
   data() {
     return {
       isOpen: false,
+      localValue: this.modelValue,
     };
   },
 
@@ -72,6 +83,12 @@ export default {
     },
   },
 
+  watch: {
+    localValue(newValue) {
+      this.$emit('update:modelValue', newValue);
+    },
+  },
+
   methods: {
     toggleDropdown() {
       this.isOpen = !this.isOpen;
@@ -79,7 +96,13 @@ export default {
 
     selectOption(option) {
       this.isOpen = false;
+      // this.localValue = option.value;
       this.$emit('update:modelValue', option.value);
+    },
+
+    selectOptionFromSelect(event) {
+      this.localValue = event.target.value;
+      this.$emit('update:modelValue', this.localValue);
     },
   },
 };
