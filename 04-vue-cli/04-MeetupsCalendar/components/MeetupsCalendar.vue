@@ -118,11 +118,15 @@ export default {
 
   methods: {
     previousMonth() {
-      this.date = new Date(this.date.setMonth(this.date.getMonth() - 1));
+      this.date = new Date(
+        this.date.setMonth(this.date.getMonth() - 1, 1)
+      )
     },
 
     nextMonth() {
-      this.date = new Date(this.date.setMonth(this.date.getMonth() + 1));
+      this.date = new Date(
+        this.date.setMonth(this.date.getMonth() + 1, 1),
+      )
     },
 
     setDayToDate(day) {
