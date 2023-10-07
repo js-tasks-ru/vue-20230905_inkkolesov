@@ -104,7 +104,7 @@ export default {
           calendar.push({
             date: calendarDate.getUTCDate(),
             isActive: false,
-            meetup: {},
+            meetups: {},
           });
         } else {
           for (let meetup = 0; meetup < this.meetupsInMonth.length; meetup++) {
@@ -117,7 +117,7 @@ export default {
           calendar.push({
             date: calendarDate.getUTCDate(),
             isActive: true,
-            meetup: { ...meetupsInDay },
+            meetups: { ...meetupsInDay },
           });
         }
       }
