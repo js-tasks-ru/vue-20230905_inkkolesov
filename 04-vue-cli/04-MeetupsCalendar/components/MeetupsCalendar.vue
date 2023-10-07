@@ -8,7 +8,7 @@
           aria-label="Previous month"
           @click="previousMonth"
         ></button>
-        <div class="calendar-view__date">{{ localDateSet }}</div>
+        <div class="calendar-view__date">{{ localDate }}</div>
         <button
           class="calendar-view__control-right"
           type="button"
@@ -17,27 +17,19 @@
         ></button>
       </div>
     </div>
+
     <div class="calendar-view__grid">
       <div
-        v-for="day in dayInMonth.total"
+        v-for="day in calendar"
+        :class="{ 'calendar-view__cell_inactive': !day.isActive }"
         class="calendar-view__cell"
-        :class="{ 'calendar-view__cell_inactive': isActive(day) }"
         tabindex="0"
       >
-        <div class="calendar-view__cell-day">
-          {{ setDayToDate(day).day }}
-        </div>
+        <div class="calendar-view__cell-day">{{ day.date }}</div>
         <div class="calendar-view__cell-content">
-          <a
-            v-for="meetup in meetups.filter(
-              (m) =>
-                setTimeStampToLocal(m.date) === setDayToDate(day).timeStamp,
-            )"
-            :href="`/meetups/${meetup.id}`"
-            class="calendar-event"
-          >
-            {{ meetup.title }}
-          </a>
+          <a v-for="meetup in day.meetup" :href="`/meetups/${meetup.id}`" class="calendar-event">{{
+            meetup.title
+          }}</a>
         </div>
       </div>
     </div>
@@ -61,106 +53,75 @@ export default {
     };
   },
 
+  methods: {
+    previousMonth() {
+      this.date = new Date(this.date.setUTCMonth(this.date.getUTCMonth() - 1, 1));
+    },
+    nextMonth() {
+      this.date = new Date(this.date.setUTCMonth(this.date.getUTCMonth() + 1, 1));
+    },
+  },
+
   computed: {
-    localDateSet() {
+    localDate() {
       return this.date.toLocaleDateString(navigator.language, {
         month: 'long',
         year: 'numeric',
       });
     },
 
+    firstDayInMonth() {
+      return new Date(this.date.getUTCFullYear(), this.date.getUTCMonth(), 1);
+    },
+    lastDayInMonth() {
+      return new Date(this.date.getUTCFullYear(), this.date.getUTCMonth() + 1, 1);
+    },
+
     dayInMonth() {
-      let firstDayInMonth = new Date(
-        this.date.getFullYear(),
-        this.date.getMonth(),
-        1,
-      ).getDay();
-      const firstDayObject = {
-        0: 6,
-        1: 0,
-        2: 1,
-        3: 2,
-        4: 3,
-        5: 4,
-        6: 5,
-      };
-      firstDayInMonth = firstDayObject[firstDayInMonth];
-
-      const dayInMonth = new Date(
-        this.date.getFullYear(),
-        this.date.getMonth() + 1,
-        0,
-      ).getDate();
-
-      let lastDayInMonth = new Date(
-        this.date.getFullYear(),
-        this.date.getMonth() + 1,
-        0,
-      ).getDay();
-      const lastDayObject = {
-        0: 0,
-        1: 6,
-        2: 5,
-        3: 4,
-        4: 3,
-        5: 2,
-        6: 1,
-      };
-      lastDayInMonth = lastDayObject[lastDayInMonth];
-
-      return {
-        total: firstDayInMonth + dayInMonth + lastDayInMonth,
-        start: firstDayInMonth,
-        end: lastDayInMonth,
-      };
-    },
-  },
-
-  methods: {
-    previousMonth() {
-      this.date = new Date(
-        this.date.setMonth(this.date.getMonth() - 1, 1)
-      )
-    },
-
-    nextMonth() {
-      this.date = new Date(
-        this.date.setMonth(this.date.getMonth() + 1, 1),
-      )
-    },
-
-    setDayToDate(day) {
-      const date = new Date(
-        this.date.getFullYear(),
-        this.date.getMonth(),
-        day - this.dayInMonth.start,
+      return (
+        this.firstDayInMonth.getUTCDay() +
+        new Date(this.date.getUTCFullYear(), this.date.getUTCMonth() + 1, 1).getUTCDate() +
+        (this.lastDayInMonth.getUTCDay() === 0 ? 0 : 7 - this.lastDayInMonth.getUTCDay())
       );
-      const localDay = date.toLocaleDateString(navigator.language, {
-        day: 'numeric',
-      });
-      const localWeekday = date.toLocaleDateString(navigator.language, {
-        weekday: 'long',
-      });
-      const month = date.getMonth();
-      const timeStamp = date.getTime();
-      return {
-        date: date,
-        day: localDay,
-        month: month,
-        timeStamp: timeStamp,
-        weekday: localWeekday,
-      };
     },
 
-    isActive(day) {
-      return this.setDayToDate(day).month !== this.date.getMonth();
+    meetupsInMonth() {
+      return this.meetups.filter(
+        (meetup) => new Date(meetup.date).getUTCMonth() === this.date.getUTCMonth(),
+      );
     },
 
-    setTimeStampToLocal(date) {
-      let timeStamp = new Date(date);
-      timeStamp =
-        timeStamp.getTime() + timeStamp.getTimezoneOffset() * 60 * 1000;
-      return +timeStamp;
+    calendar() {
+      const calendar = [];
+      for (let calendarDay = 2; calendarDay < this.dayInMonth + 2; calendarDay++) {
+        let calendarDate = new Date(
+          this.date.getUTCFullYear(),
+          this.date.getUTCMonth(),
+          calendarDay - this.firstDayInMonth.getUTCDay(),
+        );
+        const meetupsInDay = [];
+        if (calendarDate.getUTCMonth() !== this.date.getUTCMonth()) {
+          calendar.push({
+            date: calendarDate.getUTCDate(),
+            isActive: false,
+            meetup: {},
+          });
+        } else {
+          for (let meetup = 0; meetup < this.meetupsInMonth.length; meetup++) {
+            if (
+              new Date(this.meetupsInMonth[meetup].date).getUTCDate() === calendarDate.getUTCDate()
+            ) {
+              meetupsInDay.push(this.meetupsInMonth[meetup]);
+            }
+          }
+          calendar.push({
+            date: calendarDate.getUTCDate(),
+            isActive: true,
+            meetup: { ...meetupsInDay },
+          });
+        }
+      }
+      return calendar;
     },
   },
 };
