@@ -6,14 +6,14 @@
           class="calendar-view__control-left"
           type="button"
           aria-label="Previous month"
-          @click="changeMonth(-1)"
+          @click="preMonth()"
         ></button>
         <div class="calendar-view__date">{{ formattedDate }}</div>
         <button
           class="calendar-view__control-right"
           type="button"
           aria-label="Next month"
-          @click="changeMonth(+1)"
+          @click="nextMonth()"
         ></button>
       </div>
     </div>
@@ -57,9 +57,11 @@ export default {
   },
 
   methods: {
-    changeMonth(n) {
-      this.date.setUTCHours(0, 0, 0, 0);
-      this.date = new Date(this.date.setMonth(this.date.getMonth() + n, 1));
+    preMonth() {
+      this.date = new Date(this.date.setMonth(this.date.getMonth() - 1, 1));
+    },
+    nextMonth() {
+      this.date = new Date(this.date.setMonth(this.date.getMonth() + 1, 1));
     },
   },
 
@@ -70,20 +72,26 @@ export default {
         month: 'long',
       });
     },
+    UTC() {
+      this.date.setUTCHours(0, 0, 0, 0);
+      return new Date(new Date(this.date).setUTCDate(1));
+    },
     dayOfMonthFirst() {
-      const date = new Date(this.date);
+      const date = new Date(this.UTC);
+      //time
       return new Date(date.setUTCMonth(date.getUTCMonth(), 1)).getTime();
     },
     dayOfMonthLast() {
-      const date = new Date(this.date);
+      const date = new Date(this.UTC);
       return new Date(date.setUTCMonth(date.getUTCMonth() + 1, 0)).getUTCDay();
     },
     dayOfMonthFirstBefore() {
-      const date = new Date(this.date);
+      const date = new Date(this.UTC);
       return new Date(date.setUTCMonth(date.getUTCMonth(), 0)).getUTCDay();
     },
     dayOfMonthLastAfter() {
-      const date = new Date(this.date);
+      const date = new Date(this.UTC);
+      // time
       return new Date(date.setUTCMonth(date.getUTCMonth() + 1, 1)).getTime();
     },
     dayBefore() {
@@ -93,7 +101,7 @@ export default {
       return this.dayOfMonthLast === 0 ? 0 : 7 - this.dayOfMonthLast;
     },
     dayInMonth() {
-      const date = new Date(this.date);
+      const date = new Date(this.UTC);
       return new Date(date.setUTCMonth(date.getMonth() + 1, 0)).getUTCDate();
     },
     calendarDays() {
@@ -108,14 +116,13 @@ export default {
     },
     calendar() {
       let calendar = [];
-      const date = this.date;
-      const month = date.getUTCMonth();
-      const year = date.getUTCFullYear();
       for (let calendarDay = 1; calendarDay < this.calendarDays + 1; calendarDay++) {
-        let calendarDate = new Date(year, month, calendarDay - this.dayOfMonthFirstBefore);
-        if (calendarDate.getMonth() !== month) {
+        let calendarDate = new Date(
+          new Date(this.UTC).setUTCDate(calendarDay - this.dayOfMonthFirstBefore),
+        );
+        if (calendarDate.getUTCMonth() !== this.UTC.getUTCMonth()) {
           calendar.push({
-            calendarDate: calendarDate.getDate(),
+            calendarDate: calendarDate.getUTCDate(),
             inActive: true,
           });
         } else {
@@ -125,15 +132,12 @@ export default {
             meetupInCalendar < this.meetupsInMonth.length;
             meetupInCalendar++
           ) {
-            if (
-              new Date(this.meetupsInMonth[meetupInCalendar].date).getUTCDate() ===
-              calendarDate.getDate()
-            ) {
+            if (this.meetupsInMonth[meetupInCalendar].date === +calendarDate) {
               meetupsInCalendar.push(this.meetupsInMonth[meetupInCalendar]);
             }
           }
           calendar.push({
-            calendarDate: calendarDate.getDate(),
+            calendarDate: calendarDate.getUTCDate(),
             inActive: false,
             calendarMeetups: { ...meetupsInCalendar },
           });
