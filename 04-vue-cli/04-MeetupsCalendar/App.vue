@@ -16,12 +16,22 @@ let dates = [];
 for (const year of [2022, 2023]) {
   for (let month = 1; month <= 12; month += 1) {
     if (+month % 2 === 0) {
-      dates.push(`${year}-${month.toString().padStart(2, '0')}-08T00:00:00.000Z`);
-      dates.push(`${year}-${month.toString().padStart(2, '0')}-22T00:00:00.000Z`);
+      dates.push(
+        `${year}-${month.toString().padStart(2, '0')}-08T00:00:00.000Z`,
+      );
+      dates.push(
+        `${year}-${month.toString().padStart(2, '0')}-22T00:00:00.000Z`,
+      );
     } else {
-      dates.push(`${year}-${month.toString().padStart(2, '0')}-07T00:00:00.000Z`);
-      dates.push(`${year}-${month.toString().padStart(2, '0')}-12T00:00:00.000Z`);
-      dates.push(`${year}-${month.toString().padStart(2, '0')}-12T00:00:00.000Z`);
+      dates.push(
+        `${year}-${month.toString().padStart(2, '0')}-07T00:00:00.000Z`,
+      );
+      dates.push(
+        `${year}-${month.toString().padStart(2, '0')}-12T00:00:00.000Z`,
+      );
+      dates.push(
+        `${year}-${month.toString().padStart(2, '0')}-12T00:00:00.000Z`,
+      );
     }
   }
 }
@@ -31,7 +41,10 @@ const meetups = dates.map((dateISO, index) => {
   return {
     id: index,
     date: +date,
-    title: `Meetup ${date.toLocaleDateString('en-EN', { day: '2-digit', month: 'short' })}`,
+    title: `Meetup ${date.toLocaleDateString('en-EN', {
+      day: '2-digit',
+      month: 'short',
+    })}`,
     // Для удобства отладки
     __dateForDebug: dateISO,
     // Остальные свойства опущены для упрощения отладки
