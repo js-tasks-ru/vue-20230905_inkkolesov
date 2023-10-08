@@ -8,12 +8,12 @@
           aria-label="Previous month"
           @click="changeMonth(-1)"
         ></button>
-        <div class="calendar-view__date">{{ localDate }}</div>
+        <div class="calendar-view__date">{{ formattedDate }}</div>
         <button
           class="calendar-view__control-right"
           type="button"
           aria-label="Next month"
-          @click="changeMonth(1)"
+          @click="changeMonth(+1)"
         ></button>
       </div>
     </div>
@@ -21,15 +21,18 @@
     <div class="calendar-view__grid">
       <div
         v-for="day in calendar"
-        :class="{ 'calendar-view__cell_inactive': !day.isActive }"
+        :class="{ 'calendar-view__cell_inactive': day.inActive }"
         class="calendar-view__cell"
         tabindex="0"
       >
-        <div class="calendar-view__cell-day">{{ day.date }}</div>
+        <div class="calendar-view__cell-day">{{ day.calendarDate }}</div>
         <div class="calendar-view__cell-content">
-          <a v-for="meetup in day.meetups" :href="`/meetups/${meetup.id}`" class="calendar-event">{{
-            meetup.title
-          }}</a>
+          <a
+            v-for="meetup in day.calendarMeetups"
+            :href="`/meetups/${meetup.id}`"
+            class="calendar-event"
+            >{{ meetup.title }}</a
+          >
         </div>
       </div>
     </div>
@@ -49,78 +52,90 @@ export default {
 
   data() {
     return {
-      date: Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth()),
+      date: new Date(),
     };
   },
 
   methods: {
     changeMonth(n) {
-      this.date = new Date(this.UTC.setUTCMonth(this.UTC.getUTCMonth() + n, 1));
+      this.date.setUTCHours(0, 0, 0, 0);
+      this.date = new Date(this.date.setMonth(this.date.getMonth() + n, 1));
     },
   },
 
   computed: {
-    localDate() {
-      return this.UTC.toLocaleDateString(navigator.language, {
-        month: 'long',
+    formattedDate() {
+      return new Date(this.date).toLocaleDateString(navigator.language, {
         year: 'numeric',
+        month: 'long',
       });
     },
-
-    UTC() {
-      return new Date(this.date);
+    dayOfMonthFirst() {
+      const date = new Date(this.date);
+      return new Date(date.setUTCMonth(date.getUTCMonth(), 1)).getTime();
     },
-
-    firstDayInMonth() {
-      return new Date(this.UTC.getUTCFullYear(), this.UTC.getUTCMonth(), 1);
+    dayOfMonthLast() {
+      const date = new Date(this.date);
+      return new Date(date.setUTCMonth(date.getUTCMonth() + 1, 0)).getUTCDay();
     },
-    lastDayInMonth() {
-      return new Date(this.UTC.getUTCFullYear(), this.UTC.getUTCMonth() + 1, 1);
+    dayOfMonthFirstBefore() {
+      const date = new Date(this.date);
+      return new Date(date.setUTCMonth(date.getUTCMonth(), 0)).getUTCDay();
     },
-
+    dayOfMonthLastAfter() {
+      const date = new Date(this.date);
+      return new Date(date.setUTCMonth(date.getUTCMonth() + 1, 1)).getTime();
+    },
+    dayBefore() {
+      return this.dayOfMonthFirstBefore;
+    },
+    dayAfter() {
+      return this.dayOfMonthLast === 0 ? 0 : 7 - this.dayOfMonthLast;
+    },
     dayInMonth() {
-      return (
-        this.firstDayInMonth.getUTCDay() +
-        new Date(this.UTC.getUTCFullYear(), this.UTC.getUTCMonth() + 1, 1).getUTCDate() +
-        (this.lastDayInMonth.getUTCDay() === 0 ? 0 : 7 - this.lastDayInMonth.getUTCDay())
-      );
+      const date = new Date(this.date);
+      return new Date(date.setUTCMonth(date.getMonth() + 1, 0)).getUTCDate();
     },
-
+    calendarDays() {
+      return this.dayBefore + this.dayInMonth + this.dayAfter;
+    },
     meetupsInMonth() {
       return this.meetups.filter(
-        (meetup) => new Date(meetup.date).getUTCMonth() === this.UTC.getUTCMonth(),
+        (meetup) =>
+          new Date(meetup.date).getTime() >= this.dayOfMonthFirst &&
+          new Date(meetup.date).getTime() < this.dayOfMonthLastAfter,
       );
     },
-
     calendar() {
-      const calendar = [];
-      for (let calendarDay = 2; calendarDay < this.dayInMonth + 2; calendarDay++) {
-        let calendarDate = new Date(
-          this.UTC.getUTCFullYear(),
-          this.UTC.getUTCMonth(),
-          calendarDay - this.firstDayInMonth.getUTCDay(),
-        );
-        const meetupsInDay = [];
-        console.log('month calendar :' + calendarDate.getUTCMonth());
-        console.log('month utc:' + this.UTC.getUTCMonth());
-        if (calendarDate.getUTCMonth() !== this.UTC.getUTCMonth()) {
+      let calendar = [];
+      const date = this.date;
+      const month = date.getUTCMonth();
+      const year = date.getUTCFullYear();
+      for (let calendarDay = 1; calendarDay < this.calendarDays + 1; calendarDay++) {
+        let calendarDate = new Date(year, month, calendarDay - this.dayOfMonthFirstBefore);
+        if (calendarDate.getMonth() !== month) {
           calendar.push({
-            date: calendarDate.getUTCDate(),
-            isActive: false,
-            meetups: {},
+            calendarDate: calendarDate.getDate(),
+            inActive: true,
           });
         } else {
-          for (let meetup = 0; meetup < this.meetupsInMonth.length; meetup++) {
+          let meetupsInCalendar = [];
+          for (
+            let meetupInCalendar = 0;
+            meetupInCalendar < this.meetupsInMonth.length;
+            meetupInCalendar++
+          ) {
             if (
-              new Date(this.meetupsInMonth[meetup].date).getUTCDate() === calendarDate.getUTCDate()
+              new Date(this.meetupsInMonth[meetupInCalendar].date).getUTCDate() ===
+              calendarDate.getDate()
             ) {
-              meetupsInDay.push(this.meetupsInMonth[meetup]);
+              meetupsInCalendar.push(this.meetupsInMonth[meetupInCalendar]);
             }
           }
           calendar.push({
-            date: calendarDate.getUTCDate(),
-            isActive: true,
-            meetups: { ...meetupsInDay },
+            calendarDate: calendarDate.getDate(),
+            inActive: false,
+            calendarMeetups: { ...meetupsInCalendar },
           });
         }
       }
