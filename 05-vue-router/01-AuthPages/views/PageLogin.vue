@@ -45,8 +45,6 @@ export default {
 
   methods: {
     handleSubmit() {
-      console.log(this.$route);
-      console.log(this.$router);
       this.$route.query.from ? this.$router.push(this.$route.query.from) : this.$router.push('/');
     },
   },
