@@ -14,9 +14,18 @@
           </div>
         </UiFormGroup>
         <div class="form__buttons">
-          <button type="submit" class="button button_primary button_block">Войти</button>
+          <button
+            type="submit"
+            class="button button_primary button_block"
+            @click.prevent="handleSubmit"
+          >
+            Войти
+          </button>
         </div>
-        <div class="form__append">Нет аккаунта? <a href="/register" class="link">Зарегистрируйтесь</a></div>
+        <div class="form__append">
+          Нет аккаунта?
+          <RouterLink :to="{ name: 'register' }" class="link">Зарегистрируйтесь</RouterLink>
+        </div>
       </form>
     </UiContainer>
   </div>
@@ -36,7 +45,9 @@ export default {
 
   methods: {
     handleSubmit() {
-      // Требуется обработать сабмит формы
+      console.log(this.$route);
+      console.log(this.$router);
+      this.$route.query.from ? this.$router.push(this.$route.query.from) : this.$router.push('/');
     },
   },
 };
