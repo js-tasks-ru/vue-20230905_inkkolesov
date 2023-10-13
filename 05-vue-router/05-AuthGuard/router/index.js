@@ -1,16 +1,19 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { isAuthenticated } from '../services/authService.js';
+import { el } from 'date-fns/locale';
 
 const router = createRouter({
   history: createWebHistory('/05-vue-router/05-AuthGuard'),
   routes: [
     {
       path: '/',
+      name: 'index',
       alias: '/meetups',
       component: () => import('../views/PageMeetups.vue'),
     },
     {
       path: '/login',
+      name: 'login',
       meta: {
         requireGuest: true,
       },
@@ -38,6 +41,13 @@ const router = createRouter({
       component: () => import('../views/PageEditMeetup.vue'),
     },
   ],
+});
+
+// Navigation Guards
+router.beforeEach((to, from, next) => {
+  if (to.meta['requireAuth'] && !isAuthenticated()) next({ name: 'login', query: { from: to.fullPath }, });
+  else if (to.meta['requireGuest'] && isAuthenticated()) next({ path: '/' });
+  next();
 });
 
 export { router };
