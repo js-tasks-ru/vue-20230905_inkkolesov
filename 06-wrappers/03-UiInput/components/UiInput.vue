@@ -16,7 +16,12 @@
       :is="multiline ? 'textarea' : 'input'"
       :value="modelValue"
       @input="updateModelValue"
-      :class="[{ 'form-control_rounded': rounded }, { 'form-control_sm': small }]"
+      :class="[
+        {
+          'form-control_rounded': rounded,
+          'form-control_sm': small,
+        },
+      ]"
       class="form-control"
       :type="type"
     />
@@ -38,6 +43,8 @@ export default {
     modelValue: String,
     type: String,
   },
+
+  inheritAttrs: false,
 
   emits: ['update:modelValue'],
 

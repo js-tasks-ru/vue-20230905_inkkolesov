@@ -44,10 +44,13 @@ const router = createRouter({
 });
 
 // Navigation Guards
-router.beforeEach((to, from, next) => {
-  if (to.meta['requireAuth'] && !isAuthenticated()) next({ name: 'login', query: { from: to.fullPath }, });
-  else if (to.meta['requireGuest'] && isAuthenticated()) next({ path: '/' });
-  next();
+router.beforeResolve((to, from) => {
+  if (to.meta['requireAuth'] && !isAuthenticated()) {
+    return { name: 'login', query: { from: to.fullPath } };
+  } else if (to.meta['requireGuest'] && isAuthenticated()) {
+    return { path: '/' };
+  }
+  return null;
 });
 
 export { router };
