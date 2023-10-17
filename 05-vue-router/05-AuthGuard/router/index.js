@@ -44,7 +44,7 @@ const router = createRouter({
 });
 
 // Navigation Guards
-router.beforeResolve((to, from) => {
+router.beforeEach((to, from) => {
   if (to.meta['requireAuth'] && !isAuthenticated()) {
     return { name: 'login', query: { from: to.fullPath } };
   } else if (to.meta['requireGuest'] && isAuthenticated()) {
