@@ -1,8 +1,17 @@
 <template>
   <div class="image-uploader">
-    <label class="image-uploader__preview image-uploader__preview-loading" style="--bg-url: url('/link.jpeg')">
-      <span class="image-uploader__text">Загрузить изображение</span>
-      <input type="file" accept="image/*" class="image-uploader__input" />
+    <label
+      class="image-uploader__preview"
+      :class="{'image-uploader__preview-loading': !preview && uploader }"
+      style="--bg-url: url('/link.jpeg')"
+    >
+      <span class="image-uploader__text">{{ text }}</span>
+      <input
+        v-bind="$attrs"
+        type="file"
+        accept="image/*"
+        class="image-uploader__input"
+      />
     </label>
   </div>
 </template>
@@ -10,6 +19,22 @@
 <script>
 export default {
   name: 'UiImageUploader',
+  props: {
+    preview: String,
+    uploader: Function,
+  },
+  inheritAttrs: false,
+  computed:{
+    text(){
+      if (!this.preview && !this.uploader) {
+       return "Загрузить изображение"
+      } else if ( this.preview && !this.uploader) {
+        return "Удалить изображение"
+      } else if (!this.preview && this.uploader){
+        return "Загрузка..."
+      }
+    },
+  }
 };
 </script>
 
