@@ -24,6 +24,7 @@ export default {
   name: 'UiImageUploader',
   data() {
     return {
+      deletePreview: false,
       hasFile: null,
       hasUploader: false,
       hasUploaderError: null,
@@ -37,7 +38,7 @@ export default {
   computed: {
     text() {
       if (!this.hasFile) {
-        if (this.preview) {
+        if (this.preview && !this.deletePreview) {
           return 'Удалить изображение';
         } else {
           return 'Загрузить изображение';
@@ -57,18 +58,18 @@ export default {
     },
     previewStyle() {
       return this.hasFile
-        ? {
-            '--bg-url': this.preview || `url(${URL.createObjectURL(this.hasFile)}`,
-          }
+        ? { '--bg-url': `url(${URL.createObjectURL(this.hasFile)}` }
+        : this.preview
+        ? { '--bg-url': `url(${this.preview})` }
         : {};
     },
   },
   methods: {
     handleClick() {
-      if (!this.hasUploader && !this.hasUploaderError) {
-        this.$refs.fileInput.click();
-      } else if (this.hasFile) {
+      if ((this.hasFile || this.preview) && !this.uploader) {
         this.hasFile = null;
+        this.$refs.fileInput.value = '';
+        this.deletePreview = true;
         this.$emit('remove');
       }
     },
@@ -89,6 +90,7 @@ export default {
             .catch((error) => {
               this.hasUploader = false;
               this.hasUploaderError = error;
+              this.$refs.fileInput.value = '';
               this.$emit('error', error);
             });
         }
