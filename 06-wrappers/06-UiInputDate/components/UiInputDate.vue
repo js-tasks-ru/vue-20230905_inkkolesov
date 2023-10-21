@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import UiInput from './UiInput.vue'; // Замените на путь к вашему компоненту UiInput
+import UiInput from './UiInput.vue';
 
 export default {
   components: {
