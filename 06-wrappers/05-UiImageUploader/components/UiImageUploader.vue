@@ -2,18 +2,18 @@
   <div class="image-uploader">
     <label
       class="image-uploader__preview"
-      :class="{ 'image-uploader__preview-loading': !preview && uploader }"
-      :style="previewStyle"
+      :class="{ 'image-uploader__preview-loading': hasUpload }"
+      :style="onStyle"
     >
       <span class="image-uploader__text">{{ text }}</span>
       <input
-        ref="fileInput"
+        ref="inputFile"
         v-bind="$attrs"
         type="file"
         accept="image/*"
         class="image-uploader__input"
-        @change="handleFileChange"
-        @click="handleClick"
+        @change="onChangeImage"
+        @click="onClick"
       />
     </label>
   </div>
@@ -22,83 +22,58 @@
 <script>
 export default {
   name: 'UiImageUploader',
+
   data() {
     return {
-      deletePreview: false,
-      hasFile: null,
-      hasUploader: false,
-      hasUploaderError: null,
+      hasUpload: null,
+      hasImage: this.preview,
     };
   },
   props: {
     preview: String,
     uploader: Function,
   },
-  inheritAttrs: false,
   computed: {
     text() {
-      if (!this.hasFile) {
-        if (this.preview && !this.deletePreview) {
-          return 'Удалить изображение';
-        } else {
-          return 'Загрузить изображение';
-        }
-      } else {
-        if (this.uploader) {
-          if (this.hasUploader) {
-            return 'Загрузка...';
-          } else {
-            if (this.hasUploaderError) {
-              return 'Загрузить изображение';
-            }
-          }
-        }
-        return 'Удалить изображение';
-      }
+      if (this.hasUpload) return 'Загрузка...';
+      if (this.hasImage) return 'Удалить изображение';
+      else return 'Загрузить изображение';
     },
-    previewStyle() {
-      return this.hasFile
-        ? { '--bg-url': `url(${URL.createObjectURL(this.hasFile)}` }
-        : this.preview
-        ? { '--bg-url': `url(${this.preview})` }
-        : {};
+    onStyle() {
+      return this.hasImage ? { '--bg-url': `url(${this.hasImage}` } : {};
     },
   },
   methods: {
-    handleClick() {
-      if ((this.hasFile || this.preview) && !this.uploader) {
-        this.hasFile = null;
-        this.$refs.fileInput.value = '';
-        this.deletePreview = true;
-        this.$emit('remove');
-      }
+    onClick(event) {
+      if (this.hasUpload || this.hasImage) event.preventDefault();
+      if (!this.hasUpload && this.hasImage) this.onRemoveImage();
     },
-    handleFileChange(event) {
+    onRemoveImage() {
+      this.hasImage = null;
+      this.$refs.inputFile.value = '';
+      this.$emit('remove');
+    },
+    onChangeImage(event) {
       const file = event.target.files[0];
-      if (file) {
-        this.hasFile = file;
-        this.hasUploaderError = null;
-        this.hasUploader = true;
-        this.$emit('select', file);
-
-        if (this.uploader) {
-          this.uploader(file)
-            .then((result) => {
-              this.hasUploader = false;
-              this.$emit('upload', result);
-            })
-            .catch((error) => {
-              this.hasUploader = false;
-              this.hasUploaderError = error;
-              this.$refs.fileInput.value = '';
-              this.$emit('error', error);
-            });
-        }
+      this.hasImage = URL.createObjectURL(file);
+      this.$emit('select', file);
+      if (this.uploader) this.onUploadImage(file);
+    },
+    async onUploadImage(file) {
+      try {
+        this.hasUpload = true;
+        const result = await this.uploader(file);
+        this.$emit('upload', result);
+      } catch (error) {
+        this.onRemoveImage();
+        this.$emit('error', error);
+      } finally {
+        this.hasUpload = false;
       }
     },
   },
-  emits: ['select', 'upload', 'remove', 'error'],
-  expose: [],
+  inheritAttrs: false,
+  emits: ['remove', 'upload', 'select', 'error'],
 };
 </script>
 
