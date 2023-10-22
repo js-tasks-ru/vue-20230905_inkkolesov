@@ -1,7 +1,7 @@
 <template>
   <UiInput :type="type" :step="step" v-model="modelValueProxy" @input="onInput">
-    <template #left-icon>
-      <slot name="left-icon" />
+    <template v-for="slotName in Object.keys($slots)" #[slotName]>
+      <slot :name="slotName" />
     </template>
   </UiInput>
 </template>
@@ -24,7 +24,7 @@ export default {
       type: [Number, null],
       default: null,
     },
-    step: String,
+    step: [Number, String],
   },
   computed: {
     dateISO() {
@@ -37,8 +37,13 @@ export default {
         'datetime-local': this.dateISO.substring(0, 16),
       };
     },
-    modelValueProxy() {
-      return this.modelValue ? this.localDate[this.type] : '';
+    modelValueProxy: {
+      get() {
+        return this.modelValue ? this.localDate[this.type] : '';
+      },
+      set(value) {
+        this.$emit('update:modelValue', value);
+      },
     },
   },
   methods: {
