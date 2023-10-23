@@ -41,9 +41,6 @@ export default {
       get() {
         return this.modelValue ? this.localDate[this.type] : '';
       },
-      set(value) {
-        this.$emit('update:modelValue', value);
-      },
     },
   },
   methods: {
