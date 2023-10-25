@@ -1,5 +1,5 @@
 <template>
-  <UiInput :type="type" :step="step" v-model="modelValueProxy" @input="onInput">
+  <UiInput :type="type" :step="step" :model-value="modelValueProxy" @input="onInput">
     <template v-for="slotName in Object.keys($slots)" #[slotName]>
       <slot :name="slotName" />
     </template>
