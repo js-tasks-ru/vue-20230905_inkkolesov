@@ -1,31 +1,45 @@
 <template>
   <fieldset class="agenda-item-form">
-    <button type="button" class="agenda-item-form__remove-button">
+    <button type="button" class="agenda-item-form__remove-button" @click="removeAgendaItem">
       <UiIcon icon="trash" />
     </button>
 
     <UiFormGroup>
-      <UiDropdown title="Тип" :options="$options.agendaItemTypeOptions" name="type" />
+      <UiDropdown
+        v-model="localAgendaItem.type"
+        title="Тип"
+        :options="$options.agendaItemTypeOptions"
+        name="type"
+      />
     </UiFormGroup>
 
     <div class="agenda-item-form__row">
       <div class="agenda-item-form__col">
         <UiFormGroup label="Начало">
-          <UiInput type="time" placeholder="00:00" name="startsAt" />
+          <UiInput
+            v-model="localAgendaItem.startsAt"
+            type="time"
+            placeholder="00:00"
+            name="startsAt"
+          />
         </UiFormGroup>
       </div>
       <div class="agenda-item-form__col">
         <UiFormGroup label="Окончание">
-          <UiInput type="time" placeholder="00:00" name="endsAt" />
+          <UiInput v-model="localAgendaItem.endsAt" type="time" placeholder="00:00" name="endsAt" />
         </UiFormGroup>
       </div>
     </div>
 
-    <UiFormGroup label="Заголовок">
-      <UiInput name="title" />
-    </UiFormGroup>
-    <UiFormGroup label="Описание">
-      <UiInput multiline name="description" />
+    <UiFormGroup
+      v-for="(item, key) in $options.agendaItemFormSchemas[localAgendaItem.type]"
+      :label="item.label"
+    >
+      <component
+        :is="item.component"
+        v-model="localAgendaItem[key]"
+        v-bind="item.props"
+      ></component>
     </UiFormGroup>
   </fieldset>
 </template>
@@ -163,6 +177,60 @@ export default {
     agendaItem: {
       type: Object,
       required: true,
+    },
+  },
+
+  emits: ['remove', 'update:agendaItem'],
+
+  data() {
+    return {
+      localAgendaItem: { ...this.agendaItem },
+    };
+  },
+
+  watch: {
+    localAgendaItem: {
+      deep: true,
+      handler() {
+        this.updateAgendaItem();
+      },
+    },
+    'localAgendaItem.startsAt': {
+      handler(newValue, oldValue) {
+        const duration =
+          this.getMilliseconds(this.localAgendaItem.endsAt) - this.getMilliseconds(oldValue);
+        this.localAgendaItem.endsAt = this.getTime(this.getMilliseconds(newValue) + duration);
+      },
+    },
+  },
+
+  methods: {
+    removeAgendaItem() {
+      this.$emit('remove');
+    },
+    updateAgendaItem() {
+      this.$emit('update:agendaItem', this.localAgendaItem);
+    },
+    getMilliseconds(time) {
+      const timeParts = time.split(':');
+      return timeParts[0] * 3600000 + timeParts[1] * 60000;
+    },
+    getTime(milliseconds) {
+      const date = new Date(milliseconds);
+      return date.toUTCString().substring(17, 22);
+    },
+  },
+
+  computed: {
+    labelByType() {
+      switch (this.localAgendaItem.type) {
+        case 'talk':
+          return 'Тема';
+        case 'other':
+          return 'Заголовок';
+        default:
+          return 'Нестандартный текст (необязательно)';
+      }
     },
   },
 };
