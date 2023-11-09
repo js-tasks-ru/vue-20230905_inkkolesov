@@ -1,4 +1,4 @@
-import { ref, watchSyncEffect } from 'vue';
+import { ref, watchEffect } from 'vue';
 
 /**
  * @template T
@@ -7,8 +7,11 @@ import { ref, watchSyncEffect } from 'vue';
  */
 export function refHistory(source) {
   const history = ref([]);
-  watchSyncEffect(() => {
-    history.value.push(source.value);
-  });
+  watchEffect(
+    () => {
+      history.value.push(source.value);
+    },
+    { flush: 'sync' },
+  );
   return { history };
 }
