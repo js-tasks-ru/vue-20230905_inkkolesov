@@ -1,7 +1,7 @@
 <template>
   <div v-if="!sensors">Loading...</div>
   <template v-else>
-    <SensorsDataRow v-model="sensors" v-for="sensor in sensors" :key="sensor.id" :sensor="sensor" />
+    <SensorsDataRow v-for="{ ...sensor } in sensors" :key="sensor.id" :sensor="sensor" />
   </template>
 </template>
 
@@ -9,7 +9,7 @@
 import { SensorsDataController } from '../services/SensorsDataController';
 import { SensorsDataStreamingService } from '../services/SensorsDataStreamingService';
 import SensorsDataRow from './SensorsDataRow';
-import { reactive, ref } from 'vue';
+import { computed, reactive, ref, shallowReactive, watch } from 'vue';
 
 export default {
   name: 'SensorsDataView',
@@ -26,10 +26,8 @@ export default {
     this.sensorsDataController = new SensorsDataController(new SensorsDataStreamingService());
     this.sensorsDataController.addDataCallback(this.callback);
 
-    // Раз в секунду запрашиваем и выводим новые данные сенсоров
     setInterval(() => {
       this.sensorsDataController.getData();
-      // console.log('get');
     }, 1000);
   },
 
@@ -39,11 +37,12 @@ export default {
   },
 
   methods: {
+    ref,
     callback(data) {
       this.setData(data);
     },
 
-    setData: function (sensors) {
+    setData(sensors) {
       this.sensors = { ...sensors };
     },
   },
