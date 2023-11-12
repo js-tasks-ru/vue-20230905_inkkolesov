@@ -9,7 +9,6 @@
 import { SensorsDataController } from '../services/SensorsDataController';
 import { SensorsDataStreamingService } from '../services/SensorsDataStreamingService';
 import SensorsDataRow from './SensorsDataRow';
-import { computed } from 'vue';
 
 export default {
   name: 'SensorsDataView',
@@ -19,6 +18,7 @@ export default {
   data() {
     return {
       sensors: null,
+      oldSensors: null,
     };
   },
 
