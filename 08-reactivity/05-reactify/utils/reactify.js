@@ -8,6 +8,6 @@ import { computed, unref } from 'vue';
 export function reactify(func) {
   return (...args) =>
     computed(() => {
-      return func(...args.map((arg) => (unref(arg) !== undefined ? unref(arg) : unref(arg))));
+      return func(...args.map((arg) => unref(arg)));
     });
 }
