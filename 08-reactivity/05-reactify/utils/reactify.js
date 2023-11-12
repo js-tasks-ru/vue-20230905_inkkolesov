@@ -1,4 +1,4 @@
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, unref } from 'vue';
 
 /**
  * @template T
@@ -8,6 +8,6 @@ import { computed, reactive, ref } from 'vue';
 export function reactify(func) {
   return (...args) =>
     computed(() => {
-      return func(...args.map((arg) => (arg.value !== undefined ? arg.value : ref(arg).value)));
+      return func(...args.map((arg) => (unref(arg) !== undefined ? unref(arg) : unref(arg))));
     });
 }
