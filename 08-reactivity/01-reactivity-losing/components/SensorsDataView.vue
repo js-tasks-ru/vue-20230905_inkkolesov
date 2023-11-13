@@ -9,6 +9,7 @@
 import { SensorsDataController } from '../services/SensorsDataController';
 import { SensorsDataStreamingService } from '../services/SensorsDataStreamingService';
 import SensorsDataRow from './SensorsDataRow';
+import { klona } from 'klona';
 
 export default {
   name: 'SensorsDataView',
@@ -18,6 +19,7 @@ export default {
   data() {
     return {
       sensors: null,
+      oldSensors: null,
     };
   },
 
@@ -25,7 +27,6 @@ export default {
     this.sensorsDataController = new SensorsDataController(new SensorsDataStreamingService());
     this.sensorsDataController.addDataCallback(this.callback);
 
-    // Раз в секунду запрашиваем и выводим новые данные сенсоров
     setInterval(() => {
       this.sensorsDataController.getData();
     }, 1000);
@@ -42,7 +43,7 @@ export default {
     },
 
     setData(sensors) {
-      this.sensors = sensors;
+      this.sensors = klona(sensors);
     },
   },
 };

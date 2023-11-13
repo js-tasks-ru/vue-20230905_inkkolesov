@@ -1,13 +1,18 @@
 <template>
   <main class="mini-messenger">
-    <ul class="messages">
+    <ul ref="messageList" class="messages">
       <li v-for="message in messages" :key="message.id" class="message">
         {{ message.text }}
       </li>
     </ul>
     <form @submit.prevent="handleSendSubmit">
       <div class="input-group">
-        <input v-model="newMessage" type="text" class="form-control messenger__input" placeholder="New message" />
+        <input
+          v-model="newMessage"
+          type="text"
+          class="form-control messenger__input"
+          placeholder="New message"
+        />
       </div>
     </form>
   </main>
@@ -42,6 +47,11 @@ export default {
         text: this.newMessage,
       });
       this.newMessage = '';
+      this.$nextTick(() => {
+        // Прокрутить список сообщений вниз после обновления DOM
+        const messageList = this.$refs.messageList;
+        messageList.scrollTop = messageList.scrollHeight;
+      });
     },
   },
 };

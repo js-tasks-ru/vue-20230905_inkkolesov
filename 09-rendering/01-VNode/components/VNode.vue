@@ -1,5 +1,5 @@
 <script>
-import { isVNode } from 'vue';
+import { h, isVNode } from 'vue';
 
 export default {
   name: 'VNode',
@@ -8,8 +8,13 @@ export default {
     vnode: {
       type: [Object, Array],
       require: true,
-      validator: (value) => (Array.isArray(value) ? value.every((item) => isVNode(item)) : isVNode(value)),
+      validator: (value) =>
+        Array.isArray(value) ? value.every((item) => isVNode(item)) : isVNode(value),
     },
+  },
+
+  render() {
+    return this.vnode;
   },
 };
 </script>
