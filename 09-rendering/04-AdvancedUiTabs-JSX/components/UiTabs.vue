@@ -19,16 +19,28 @@ export default {
   },
 
   render() {
+    const tabs = this.$slots.default()?.filter((tab) => tab.type.name === 'UiTab');
+    const tabContent = this.$slots.default()?.find((tab) => tab.props.name === this.$props.active);
     return (
       <div class="tabs">
         <div class="tabs__nav" role="tablist">
-          <a class="tabs__tab" role="tab">Tab</a>
-          <a class="tabs__tab tabs__tab_active" role="tab">Active Tab</a>
-          <a class="tabs__tab" role="tab">Tab</a>
+          {tabs.map((tab) =>
+            tab.props.name === this.$props.active ? (
+              <a
+                class="tabs__tab tabs__tab_active"
+                onClick={() => this.setActive(tab.props.name)}
+                role="tab"
+              >
+                {tab.props.title}
+              </a>
+            ) : (
+              <a class="tabs__tab" onClick={() => this.setActive(tab.props.name)} role="tab">
+                {tab.props.title}
+              </a>
+            ),
+          )}
         </div>
-        <div class="tabs__content">
-          ACTIVE TAB CONTENT
-        </div>
+        <div class="tabs__content">{tabContent}</div>
       </div>
     );
   },
