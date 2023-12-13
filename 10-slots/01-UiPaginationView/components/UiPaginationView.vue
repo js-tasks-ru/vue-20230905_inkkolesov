@@ -1,6 +1,6 @@
 <template>
-  <div class="pagination-container">
-    <!-- Контент страницы -->
+  <div v-for="item in currentPages" class="pagination-container">
+    <slot :item="item" />
   </div>
 </template>
 
@@ -24,6 +24,14 @@ export default {
     items: {
       type: Array,
       required: true,
+    },
+  },
+
+  computed: {
+    currentPages() {
+      const start = (this.page - 1) * this.perPage;
+      const end = start + this.perPage;
+      return this.items.slice(start, end);
     },
   },
 };
