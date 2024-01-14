@@ -1,8 +1,14 @@
 <template>
   <UiCalendarView>
-    <div v-for="holiday in internationalHolidaysMap[0][7]" :key="holiday" class="holiday">
-      {{ holiday }}
-    </div>
+    <template #calendarDay="calendarDay">
+      <div
+        v-for="holiday in internationalHolidaysFiltered(+calendarDay.date)"
+        :key="holiday"
+        class="holiday"
+      >
+        {{ holiday }}
+      </div>
+    </template>
   </UiCalendarView>
 </template>
 
@@ -75,6 +81,15 @@ export default {
         }
       }
       return result;
+    },
+  },
+
+  methods: {
+    internationalHolidaysFiltered(date) {
+      const currentMonth = new Date(date).getMonth() - 1;
+      const currentDate = new Date(date).getDate();
+      const holidayInMonth = this.internationalHolidaysMap[currentMonth];
+      return true;
     },
   },
 };
