@@ -86,10 +86,11 @@ export default {
 
   methods: {
     internationalHolidaysFiltered(date) {
-      const currentMonth = new Date(date).getMonth() - 1;
+      const currentMonth = new Date(date).getMonth();
       const currentDate = new Date(date).getDate();
-      const holidayInMonth = this.internationalHolidaysMap[currentMonth];
-      return true;
+      return currentDate in this.internationalHolidaysMap[currentMonth]
+        ? this.internationalHolidaysMap[+currentMonth][+currentDate]
+        : '';
     },
   },
 };
