@@ -1,13 +1,7 @@
 <template>
-  <template v-if="isPending">
-    <slot name="pending"></slot>
-  </template>
-  <template v-else-if="isFulfilled">
-    <slot name="fulfilled" :result="result"></slot>
-  </template>
-  <template v-else-if="isRejected">
-    <slot name="rejected" :error="error"></slot>
-  </template>
+  <slot v-if="state === 'pending'" name="pending" />
+  <slot v-else-if="state === 'fulfilled'" name="fulfilled" :result="result" />
+  <slot v-else-if="state === 'rejected'" name="rejected" :error="error" />
 </template>
 
 <script>
@@ -25,9 +19,7 @@ export default {
     return {
       result: null,
       error: null,
-      isPending: true,
-      isFulfilled: false,
-      isRejected: false,
+      state: 'pending',
     };
   },
 
@@ -40,21 +32,18 @@ export default {
 
   methods: {
     handlePromiseChange() {
-      this.isPending = true;
-      this.isFulfilled = false;
-      this.isRejected = false;
+      this.result = null;
+      this.error = null;
+      this.state = 'pending';
 
       this.promise
         .then((result) => {
           this.result = result;
-          this.isFulfilled = true;
+          this.state = 'fulfilled';
         })
         .catch((error) => {
           this.error = error;
-          this.isRejected = true;
-        })
-        .finally(() => {
-          this.isPending = false;
+          this.state = 'rejected';
         });
     },
   },
