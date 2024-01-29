@@ -1,14 +1,36 @@
 <template>
-  <button class="button-group__button button-group__button_active" type="button" aria-selected="false">Button</button>
+  <button
+    class="button-group__button"
+    :class="{ 'button-group__button_active': value === buttonGroup.modelValue }"
+    type="button"
+    aria-selected="false"
+    @click="updateModel"
+  >
+    <slot />
+  </button>
 </template>
 
 <script>
 export default {
   name: 'UiButtonGroupItem',
 
+  inject: ['buttonGroup'],
+
   props: {
     value: {
       required: true,
+    },
+  },
+
+  beforeCreate() {
+    if (this.$parent.$options.name !== 'UiButtonGroup') {
+      console.warn('UiButtonGroupItem должен быть использован только внутри UiButtonGroup');
+    }
+  },
+
+  methods: {
+    updateModel() {
+      this.buttonGroup.$emit('update:modelValue', this.value);
     },
   },
 };
