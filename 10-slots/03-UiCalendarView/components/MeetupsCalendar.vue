@@ -1,8 +1,15 @@
 <template>
   <UiCalendarView>
-    <UiCalendarEvent v-if="meetups[0]" tag="a" :href="`/meetups/${meetups[0].id}`">
-      {{ meetups[0].title }}
-    </UiCalendarEvent>
+    <template #calendarDay="calendarDay">
+      <UiCalendarEvent
+        v-for="meetup in meetupsInDay(+calendarDay.date)"
+        tag="a"
+        :key="meetup.id"
+        :href="`/meetups/${meetup.id}`"
+      >
+        {{ meetup.title }}
+      </UiCalendarEvent>
+    </template>
   </UiCalendarView>
 </template>
 
@@ -22,6 +29,13 @@ export default {
     meetups: {
       type: Array,
       required: true,
+    },
+  },
+
+  methods: {
+    meetupsInDay(currentDate) {
+      const nextDate = new Date(currentDate).setDate(new Date(currentDate).getDate() + 1);
+      return this.meetups.filter((meetup) => meetup.date >= currentDate && meetup.date < +nextDate);
     },
   },
 };
